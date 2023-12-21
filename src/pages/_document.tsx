@@ -16,8 +16,6 @@ export default function Document() {
           rel='stylesheet'
         ></link>
 
-        <title>Ignite Shop</title>
-
         <style
           id='stitches'
           dangerouslySetInnerHTML={{ __html: getCssText() }}
