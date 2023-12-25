@@ -7,6 +7,8 @@ import {
   ProductContainer,
   ProductDetails,
 } from '../../styles/pages/product';
+import axios from 'axios';
+import { useState } from 'react';
 
 interface ProductProps {
   product: {
@@ -20,8 +22,24 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  function handleBuyButton() {
-    console.log(product.defaultPriceId);
+  const [isCreateCheckoutLoading, setIsCreateCheckoutLoading] = useState(false);
+
+  async function handleBuyButton() {
+    try {
+      setIsCreateCheckoutLoading(true);
+
+      const response = await axios.post('/api/checkout', {
+        priceId: product.defaultPriceId,
+      });
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl; // pagina externa
+    } catch (error) {
+      alert('Falha ao direcionar o checkout!');
+
+      setIsCreateCheckoutLoading(false);
+    }
   }
 
   return (
@@ -36,7 +54,9 @@ export default function Product({ product }: ProductProps) {
 
         <p>{product.description}</p>
 
-        <button onClick={handleBuyButton}>Comprar agora</button>
+        <button disabled={isCreateCheckoutLoading} onClick={handleBuyButton}>
+          Comprar agora
+        </button>
       </ProductDetails>
     </ProductContainer>
   );
