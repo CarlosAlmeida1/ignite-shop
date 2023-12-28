@@ -1,18 +1,28 @@
 import { globalStyles } from '@/styles/global';
 import { AppProps } from 'next/app';
-import logotipo from '@/assets/logotipo-ignite-shop.svg';
-import { Container, Header } from '@/styles/pages/app';
-import Image from 'next/image';
+import { Container } from '@/styles/pages/app';
+import Header from '@/components/Header/Header';
+import CartContextProvider from '@/contexts/CartContext';
+import 'react-toastify/dist/ReactToastify.css';
+import { Slide, ToastContainer } from 'react-toastify';
 
 globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Container>
-      <Header>
-        <Image src={logotipo} alt='Logotipo do ignite shop' />
-      </Header>
-      <Component {...pageProps} />
-    </Container>
+    <CartContextProvider>
+      <Container>
+        <Header />
+        <Component {...pageProps} />
+        <ToastContainer
+          position='top-center'
+          autoClose={2500}
+          transition={Slide}
+          pauseOnHover={false}
+          closeOnClick={true}
+          toastStyle={{ zIndex: 9999, background: 'none', color: 'white' }}
+        />
+      </Container>
+    </CartContextProvider>
   );
 }

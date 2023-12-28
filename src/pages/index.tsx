@@ -10,14 +10,13 @@ import { HomeContainer, Product } from '../styles/pages/home';
 
 import 'keen-slider/keen-slider.min.css';
 import Stripe from 'stripe';
+import CartButton from '@/components/CartButton';
+import { IProduct } from '@/contexts/CartContext';
+import useCart from '@/hook/useCart';
+import { toast } from 'react-toastify';
 
 interface HomeProps {
-  products: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: number;
-  }[];
+  products: IProduct[];
 }
 
 export default function Home({ products }: HomeProps) {
@@ -27,6 +26,18 @@ export default function Home({ products }: HomeProps) {
       spacing: 48,
     },
   });
+
+  const { addToCartItems, verifyIfItemAlreadyExists } = useCart();
+
+  function handleAddToCartItems(
+    e: MouseEvent<HTMLButtonElement>,
+    product: IProduct
+  ) {
+    e.preventDefault();
+
+    addToCartItems(product);
+    toast.success('Produto adicionado à sacola');
+  }
 
   return (
     <>
@@ -42,11 +53,20 @@ export default function Home({ products }: HomeProps) {
               prefetch={false}
             >
               <Product className='keen-slider__slide'>
-                <Image src={product.imageUrl} width={520} height={480} alt='' />
+                <Image width={520} height={480} alt='' src={product.imageUrl} />
 
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </div>
+                  <CartButton
+                    size='large'
+                    color='green'
+                    showQuantity={false}
+                    disabled={verifyIfItemAlreadyExists(product.id)}
+                    onClick={(e) => handleAddToCartItems(e, product)}
+                  />
                 </footer>
               </Product>
             </Link>
@@ -74,6 +94,8 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount / 100),
+      numberPrice: price.unit_amount / 100,
+      defaultPriceId: price.id,
     };
   });
 
