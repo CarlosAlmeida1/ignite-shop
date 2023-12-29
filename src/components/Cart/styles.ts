@@ -16,7 +16,7 @@ export const CartContent = styled(Dialog.Content, {
 
   h2: {
     fontWeight: 700,
-    fontSize: '$lg',
+    fontSize: '$2xl',
     color: '$gray100',
     marginBottom: '2rem',
   },
@@ -27,6 +27,21 @@ export const CartContent = styled(Dialog.Content, {
     gap: '1.5rem',
     flex: 1,
     overflowY: 'auto',
+  },
+});
+
+export const EmptyList = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  color: '$gray300',
+  fontSize: '1.5rem',
+  gap: '1rem',
+  height: '100%',
+
+  svg: {
+    fontSize: '3rem',
   },
 });
 

@@ -7,10 +7,11 @@ import {
   CartProduct,
   CartProductDetails,
   CartProductImage,
+  EmptyList,
   FinishValuesDetails,
 } from './styles';
 
-import { X } from '@phosphor-icons/react';
+import { ClipboardText, X } from '@phosphor-icons/react';
 import useCart from '@/hook/useCart';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -59,7 +60,12 @@ export default function Cart() {
           <h2>Sacola de compras </h2>
 
           <section>
-            {cartItems.length <= 0 && <p>Parece que sua sacola está vazio.</p>}
+            {cartItems.length <= 0 && (
+              <EmptyList>
+                Opss... Sua sacola está vazia
+                <ClipboardText weight='bold' />
+              </EmptyList>
+            )}
             {cartItems.map((cartItem) => (
               <CartProduct key={cartItem.id}>
                 <CartProductImage>
